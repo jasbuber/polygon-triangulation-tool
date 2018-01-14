@@ -1,0 +1,15 @@
+{
+  "name": "piggey-app",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@types/node": "^8.0.47",
+    "http-server": "^0.10.0",
+    "install": "^0.10.1",
+    "nodemon": "^1.12.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  },
+  "scripts": {
+    "start": "concurrently \"tsc -w\" \"http-server -c-1\" \"watchify js/main.js -s module -o js/bundle.js\""
+  }
+}
