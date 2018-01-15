@@ -1,4 +1,4 @@
-export class Vector{
+export class Vector {
 
     startPos: number;
 
@@ -14,15 +14,15 @@ export class Vector{
 
     endY: number;
 
-    constructor(startPos: number, endPos: number, width: number){
+    constructor(startPos: number, endPos: number, width: number) {
         this.startPos = startPos;
         this.endPos = endPos;
         this.width = width;
 
-        this.startY = Math.floor( startPos / width );
-        this.startX = startPos - ( this.startY * width );
-        this.endY = Math.floor( endPos / width );
-        this.endX = endPos - ( this.endY * width );
+        this.startY = Math.floor(startPos / width);
+        this.startX = startPos - (this.startY * width);
+        this.endY = Math.floor(endPos / width);
+        this.endX = endPos - (this.endY * width);
     }
 
     getLength() {
@@ -30,47 +30,47 @@ export class Vector{
             Math.pow(this.endX - this.startX, 2) + Math.pow(this.endY - this.startY, 2));
     }
 
-    getStartPosition(){
+    getStartPosition() {
         return this.startPos;
     }
 
-    getEndPosition(){
+    getEndPosition() {
         return this.endPos;
     }
 
-    getWidth(){
+    getWidth() {
         return this.width;
     }
 
-    getStartX(): number{
+    getStartX(): number {
         return this.startX;
-    } 
+    }
 
-    getStartY(): number{
+    getStartY(): number {
         return this.startY;
-    } 
+    }
 
-    getEndX(): number{
+    getEndX(): number {
         return this.endX;
-    } 
+    }
 
-    getEndY(): number{
+    getEndY(): number {
         return this.endY;
-    } 
+    }
 
-    moveStartX(move: number){
+    moveStartX(move: number) {
         this.startX += move;
     }
 
-    moveStartY(move: number){
+    moveStartY(move: number) {
         this.startY += move;
     }
 
-    moveEndX(move: number){
+    moveEndX(move: number) {
         this.endX += move;
     }
 
-    moveEndY(move: number){
+    moveEndY(move: number) {
         this.endY += move;
     }
 
