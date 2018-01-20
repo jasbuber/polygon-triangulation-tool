@@ -1,18 +1,28 @@
 <html>
-    <head>
-        <script type="text/javascript" src="./js/bundle.js"></script>
-    </head>
-    <body>
-        <div>
-            <label>inner points nr</label><input type="range" min="1" max="200" value="15" onchange="" class="inner-points-slider">
-            <label>border points nr</label><input type="range" min="10" max="1000" value="100" class="border-points-slider">
-        </div>
-        <div>
+
+<head>
+    <script type="text/javascript" src="./js/bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+</head>
+
+<body>
+    <div class="control-panel">
+        <div class="actions-panel">
             <input type="file">
-            <input type="button" onclick="module.generateInnerVectors()" value="generate"/>
+            <input type="button" onclick="module.generateInnerVectors()" value="generate" />
+            <input type="button" onclick="module.getImage()" value="download" />
         </div>
-        <div>
-            <canvas id="main-canvas"></canvas>
+        <div class="sliders-panel">
+            <label>inner points nr: <span class="inner-points-nr">15</span></label>
+            <input type="range" min="1" max="200" value="15" onchange="" class="slider inner-points-slider">
+            <label>border points nr: <span class="border-points-nr">30</span></label>
+            <input type="range" min="10" max="300" value="30" class="slider border-points-slider">
         </div>
-    </body>
+    </div>
+    <div class="canvas-panel">
+        <canvas id="main-canvas"></canvas>
+        <canvas id="vector-canvas"></canvas>
+    </div>
+</body>
+
 </html>
