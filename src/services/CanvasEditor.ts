@@ -4,14 +4,26 @@ export class CanvasEditor {
 
     changePixelColorInArray(data: Uint8ClampedArray, index: number, r: number, g: number, b: number) {
         data[index] = r;
-        data[index + 1] = r;
-        data[index + 2] = r;
+        data[index + 1] = g;
+        data[index + 2] = b;
     }
 
-    repaintPixels(data: Uint8ClampedArray, pixelPositions: Array<number>, r: number, g: number, b: number) {
+    repaintPixels(canvas: HTMLCanvasElement, pixelPositions: Array<number>, r: number, g: number, b: number, repaint: boolean) {
+        var context = canvas.getContext('2d');
+
+        if (repaint) {
+            context.fillStyle = "white";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+        var data: Uint8ClampedArray = imgData.data;
+
         pixelPositions.forEach(p => {
             this.changePixelColorInArray(data, p * 4, r, g, b);
         });
+
+        context.putImageData(imgData, 0, 0);
     }
 
     drawVectors(canvas: HTMLCanvasElement, vectors: Array<Vector>) {
@@ -26,19 +38,6 @@ export class CanvasEditor {
             context.stroke();
         });
 
-    }
-
-    loadObjectUrl(canvas: HTMLCanvasElement, url: string) {
-        var context = canvas.getContext('2d');
-        var img = new Image();
-        img.src = url;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-
-        img.onload = function () {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            context.drawImage(img, 0, 0);
-        }
     }
 
 }

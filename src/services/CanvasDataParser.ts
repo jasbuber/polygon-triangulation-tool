@@ -1,7 +1,14 @@
 import { Pixel } from "../model/Pixel";
 import { Shape } from "../model/Shape";
+import { SortingService } from "./SortingService";
 
 export class CanvasDataParser {
+
+    sortingService: SortingService;
+
+    constructor(sortingService: SortingService){
+        this.sortingService = sortingService;
+    }
 
     process(canvas: HTMLCanvasElement, bgPixel: Pixel): Shape {
 
@@ -94,7 +101,7 @@ export class CanvasDataParser {
 
         }
 
-        return new Shape(border, content);
+        return new Shape(this.sortingService.sortByClosestPoints(border, width), content);
     }
 
     getPixelNeighbours(position: number, width: number): Array<number> {

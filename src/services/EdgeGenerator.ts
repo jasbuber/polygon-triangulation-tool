@@ -1,6 +1,13 @@
 import { Vector } from "../model/Vector";
+import { SortingService } from "../services/SortingService";
 
 export class EdgeGenerator {
+
+    private sortingService: SortingService;
+
+    constructor(sortingService: SortingService){
+        this.sortingService = sortingService;
+    }
 
     generateEdgesNet(points: Array<number>, connections: Array<number>, width: number, preEdges: Array<Vector>): Array<Vector> {
         let edges: Array<Vector> = [];
@@ -11,7 +18,8 @@ export class EdgeGenerator {
 
         let connectionsCopy = connections.slice();
         points.forEach((p, key) => {
-            closestPixels.push(connectionsCopy.sort(this.compare(p, width)).slice(1));
+            let sortedPoints = this.sortingService.sortByClosestFromPoint(p, connections, width);
+            closestPixels.push(sortedPoints.slice(1));
             pointsKeyMap.set(p, key);
         });
 
@@ -39,7 +47,7 @@ export class EdgeGenerator {
 
     public generateVectorShape(points: Array<number>, width: number): Array<Vector> {
         let vectors: Array<Vector> = [];
-        let pointsCopy = this.sortByClosestPoints(points, width);
+        let pointsCopy = points.slice()
         let firstPoint = pointsCopy.shift();
         let startPoint = firstPoint;
 
@@ -51,51 +59,6 @@ export class EdgeGenerator {
         vectors.push(new Vector(pointsCopy[pointsCopy.length - 1], firstPoint, width));
 
         return vectors;
-    }
-
-    compare(p: number, width: number) {
-        return function (a: number, b: number) {
-
-            let pY = Math.floor(p / width);
-            let pX = p - (pY * width);
-            let aY = Math.floor(a / width);
-            let aX = a - (aY * width);
-            let bY = Math.floor(b / width);
-            let bX = b - (bY * width);
-
-            let pToA = Math.sqrt(Math.pow(aX - pX, 2) + Math.pow(aY - pY, 2));
-            let pToB = Math.sqrt(Math.pow(bX - pX, 2) + Math.pow(bY - pY, 2));
-
-            if (pToA < pToB) {
-                return -1;
-            }
-            else if (pToA > pToB) {
-                return 1;
-            }
-            else {
-                return 0;
-            }
-        }
-    }
-
-    public sortByClosestPoints(points: Array<number>, width: number): Array<number> {
-        let startPoint = points.shift();
-        let sortedPoints: Array<number> = [startPoint];
-        while (points.length > 1) {
-            points.sort(this.compare(startPoint, width));
-            sortedPoints.push(points.shift());
-
-            let lastClosestPoint = points.shift();
-            sortedPoints.push(lastClosestPoint);
-
-            startPoint = lastClosestPoint;
-        }
-
-        while (points.length > 0) {
-            sortedPoints.push(points.shift());
-        }
-
-        return sortedPoints;
     }
 
     private turn(aX: number, aY: number, bX: number, bY: number, cX: number, cY: number): number {

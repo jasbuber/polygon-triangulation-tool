@@ -25,9 +25,7 @@ export class ShapeEditor {
     }
 
     public generateBorderPoints(shape: Shape, frequency: number): Array<number> {
-
-        let borderPoints: Array<number> = this.randomPointGenerator.generatePoints(shape.getBorder(), frequency);
-        return this.edgeGenerator.sortByClosestPoints(borderPoints, this.canvasWidth);
+        return this.randomPointGenerator.generatePoints(shape.getBorder(), frequency);
     }
 
     public generateContentPoints(shape: Shape, frequency: number): Array<number> {
@@ -48,7 +46,5 @@ export class ShapeEditor {
 
         return edges;
     }
-
-
 
 }
