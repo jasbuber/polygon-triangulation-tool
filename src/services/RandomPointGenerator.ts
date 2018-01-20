@@ -2,11 +2,12 @@ export class RandomPointGenerator {
 
     public generatePoints(pixels: Array<number>, frequency: number): Array<number> {
         let step = pixels.length / frequency;
-        let pos = step;
+        let pos = 0;
         let generatedPixels: Array<number> = [];
 
         while (pos < pixels.length) {
-            generatedPixels.push(pixels[Math.floor(pos)]);
+            var pixel = pixels[Math.floor(pos)];
+            generatedPixels.push(pixel);
             pos += step;
         }
 
