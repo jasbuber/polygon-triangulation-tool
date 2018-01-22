@@ -1,5 +1,6 @@
 import { Shape } from "./model/Shape";
 import { Pixel } from "./model/Pixel";
+import { Vector } from "./model/Vector";
 
 import { CanvasDataParser } from "./services/CanvasDataParser";
 import { CanvasEditor } from "./services/CanvasEditor";
@@ -25,10 +26,11 @@ export function generateInnerVectors() {
     vectorCanvas.width = mainCanvas.width;
     vectorCanvas.height = mainCanvas.height;
     
-    let shapeEditor = new ShapeEditor(new RandomPointGenerator(), new EdgeGenerator(new SortingService()), mainCanvas.width);
+    let sortingService = new SortingService();
+    let shapeEditor = new ShapeEditor(new RandomPointGenerator(), new EdgeGenerator(sortingService), sortingService, mainCanvas.width);
 
     new CanvasEditor().drawVectors(vectorCanvas, 
-        shapeEditor.generateInnerVectors(shape, parseInt(innerPointsNr.innerText), parseInt(borderPointsNr.innerText), 100));
+        shapeEditor.generateInnerVectors(shape, parseInt(innerPointsNr.innerText), parseInt(borderPointsNr.innerText), 100, 100));
 }
 
 function onImageLoad(){
@@ -40,9 +42,11 @@ function onImageLoad(){
     var innerPointsNr = <HTMLInputElement>document.getElementsByClassName("inner-points-nr")[0];
     var borderPointsNr = <HTMLInputElement>document.getElementsByClassName("border-points-nr")[0];
 
+    let sortingService = new SortingService();
+
     vectorCanvas.width = mainCanvas.width;
     vectorCanvas.height = mainCanvas.height;
-    let shapeEditor = new ShapeEditor(new RandomPointGenerator(), new EdgeGenerator(new SortingService()), mainCanvas.width);
+    let shapeEditor = new ShapeEditor(new RandomPointGenerator(), new EdgeGenerator(sortingService), sortingService, mainCanvas.width);
 
     shape = new CanvasDataParser(new SortingService()).process(mainCanvas, bgPixel);
 

@@ -1,6 +1,42 @@
+import { Vector } from "../model/Vector";
+
 export class SortingService{
 
-    compare(p: number, width: number) {
+    public sortByClosestPoints(originalPoints: Array<number>, width: number): Array<number> {
+        let points = originalPoints.slice();
+        let startPoint = points.shift();
+        let sortedPoints: Array<number> = [startPoint];
+        while (points.length > 1) {
+            points.sort(this.compareByDistanceFromPoint(startPoint, width));
+            sortedPoints.push(points.shift());
+
+            let lastClosestPoint = points.shift();
+            sortedPoints.push(lastClosestPoint);
+
+            startPoint = lastClosestPoint;
+        }
+
+        while (points.length > 0) {
+            sortedPoints.push(points.shift());
+        }
+
+        return sortedPoints;
+    }
+
+    public sortByClosestFromPoint(startPoint: number, originalPoints: Array<number>, width: number): Array<number> {
+        let points = originalPoints.slice();
+        let sortedPoints: Array<number> = [startPoint];
+
+        return points.sort(this.compareByDistanceFromPoint(startPoint, width));
+    }
+
+    public sortByDistanceFromVectors(originalPoints: Array<number>, width: number, vectors: Array<Vector>): Array<number> {
+        let points = originalPoints.slice();
+
+        return points.sort(this.compareByDistanceFromVectors(width, vectors));
+    }
+
+    private compareByDistanceFromPoint(p: number, width: number) {
         return function (a: number, b: number) {
 
             let pY = Math.floor(p / width);
@@ -25,32 +61,42 @@ export class SortingService{
         }
     }
 
-    public sortByClosestPoints(originalPoints: Array<number>, width: number): Array<number> {
-        let points = originalPoints.slice();
-        let startPoint = points.shift();
-        let sortedPoints: Array<number> = [startPoint];
-        while (points.length > 1) {
-            points.sort(this.compare(startPoint, width));
-            sortedPoints.push(points.shift());
+    private compareByDistanceFromVectors(width: number, vectors: Array<Vector>){
 
-            let lastClosestPoint = points.shift();
-            sortedPoints.push(lastClosestPoint);
+        return function (a: number, b: number) {
 
-            startPoint = lastClosestPoint;
+            let aY = Math.floor(a / width);
+            let aX = a - (aY * width);
+            let bY = Math.floor(b / width);
+            let bX = b - (bY * width);
+
+            let distanceFromA = 0;
+            let distanceFromB = 0;
+
+            vectors.forEach( v => {
+                let vToA = Math.sqrt(Math.pow(aX - v.getEndX(), 2) + Math.pow(aY - v.getEndY(), 2));
+                let vToB = Math.sqrt(Math.pow(bX - v.getEndX(), 2) + Math.pow(bY - v.getEndY(), 2));
+
+                if(distanceFromA == 0 || distanceFromA > vToA){
+                    distanceFromA = vToA;
+                }
+
+                if (distanceFromB == 0 || distanceFromB > vToB) {
+                    distanceFromB = vToB;
+                }
+            });
+
+            if (distanceFromA < distanceFromB) {
+                return -1;
+            }
+            else if (distanceFromA > distanceFromB) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
         }
 
-        while (points.length > 0) {
-            sortedPoints.push(points.shift());
-        }
-
-        return sortedPoints;
-    }
-
-    public sortByClosestFromPoint(startPoint: number, originalPoints: Array<number>, width: number): Array<number> {
-        let points = originalPoints.slice();
-        let sortedPoints: Array<number> = [startPoint];
-
-        return points.sort(this.compare(startPoint, width));
     }
 
 }
