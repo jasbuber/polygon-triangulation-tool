@@ -13,34 +13,37 @@ const bgPixel: Pixel = new Pixel(0, 0, 0, 255, 255, 255, 0);
 
 var shape: Shape;
 
+var mainCanvas: HTMLCanvasElement;
+
+var vectorCanvas: HTMLCanvasElement;
+
+var innerPointsElem: HTMLInputElement;
+
+var borderPointsElem: HTMLInputElement;
+
 export function generateInnerVectors() {
-    
-    var mainCanvas = <HTMLCanvasElement>document.getElementById("main-canvas");
-    var vectorCanvas = <HTMLCanvasElement>document.getElementById("vector-canvas");
 
-    vectorCanvas.getContext("2d").clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
+    clearVectorCanvas();
 
-    var innerPointsNr = <HTMLInputElement>document.getElementsByClassName("inner-points-nr")[0];
-    var borderPointsNr = <HTMLInputElement>document.getElementsByClassName("border-points-nr")[0];
+    let innerAccuracyElem = <HTMLInputElement>document.getElementsByClassName("inner-accuracy")[0];
+    let shapeAccuracyElem = <HTMLInputElement>document.getElementsByClassName("shape-accuracy")[0];
 
-    vectorCanvas.width = mainCanvas.width;
-    vectorCanvas.height = mainCanvas.height;
-    
     let sortingService = new SortingService();
     let shapeEditor = new ShapeEditor(new RandomPointGenerator(), new EdgeGenerator(sortingService), sortingService, mainCanvas.width);
 
-    new CanvasEditor().drawVectors(vectorCanvas, 
-        shapeEditor.generateInnerVectors(shape, parseInt(innerPointsNr.innerText), parseInt(borderPointsNr.innerText), 100, 100));
+    let innerAccuracy = parseInt(innerAccuracyElem.value);
+    let shapeAccuracy = parseInt(shapeAccuracyElem.value);
+    let innerPointsNr = parseInt(innerPointsElem.innerText);
+    let borderPointsNr = parseInt(borderPointsElem.innerText);
+
+    let innerVectors = shapeEditor.generateInnerVectors(shape, innerPointsNr, borderPointsNr, shapeAccuracy, innerAccuracy);
+
+    new CanvasEditor().drawVectors(vectorCanvas, innerVectors);
 }
 
 function onImageLoad(){
-    var mainCanvas = <HTMLCanvasElement>document.getElementById("main-canvas");
-    var vectorCanvas = <HTMLCanvasElement>document.getElementById("vector-canvas");
 
-    vectorCanvas.getContext("2d").clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
-
-    var innerPointsNr = <HTMLInputElement>document.getElementsByClassName("inner-points-nr")[0];
-    var borderPointsNr = <HTMLInputElement>document.getElementsByClassName("border-points-nr")[0];
+    clearVectorCanvas();
 
     let sortingService = new SortingService();
 
@@ -53,25 +56,27 @@ function onImageLoad(){
 }
 
 window.onload = function () {
+
+    mainCanvas = <HTMLCanvasElement>document.getElementById("main-canvas");
+    vectorCanvas = <HTMLCanvasElement>document.getElementById("vector-canvas");
+    innerPointsElem = <HTMLInputElement>document.getElementsByClassName("inner-points-nr")[0];
+    borderPointsElem = <HTMLInputElement>document.getElementsByClassName("border-points-nr")[0];
+
     var input = <HTMLInputElement>document.querySelector("input[type=file]");
     input.addEventListener("change", loadImage, false);
 
     var innerPointsSlider: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName("inner-points-slider")[0];
     var borderPointsSlider = <HTMLInputElement>document.getElementsByClassName("border-points-slider")[0];
 
-    var innerPointsNr = <HTMLInputElement> document.getElementsByClassName("inner-points-nr")[0];
-    var borderPointsNr = <HTMLInputElement> document.getElementsByClassName("border-points-nr")[0];
-
     innerPointsSlider.oninput = function () {
-        innerPointsNr.innerHTML = (<HTMLInputElement>this).value;
+        innerPointsElem.innerHTML = (<HTMLInputElement>this).value;
     }
 
     borderPointsSlider.oninput = function () {
-        borderPointsNr.innerHTML = (<HTMLInputElement>this).value;
+        borderPointsElem.innerHTML = (<HTMLInputElement>this).value;
     }
 
     innerPointsSlider.onmouseup = function () {
-        console.log("onDrop");
         generateInnerVectors();
     }
 
@@ -81,14 +86,11 @@ window.onload = function () {
 };
 
 export function loadImage(e: any) {
-    var canvas = <HTMLCanvasElement>document.getElementById("main-canvas");
-    var vectorCanvas = <HTMLCanvasElement>document.getElementById("vector-canvas");
-
     vectorCanvas.getContext("2d").clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
 
     var url = URL.createObjectURL(e.target.files[0]);
 
-    loadObjectUrl(canvas, url);
+    loadObjectUrl(mainCanvas, url);
 }
 
 function loadObjectUrl(canvas: HTMLCanvasElement, url: string) {
@@ -106,13 +108,19 @@ function loadObjectUrl(canvas: HTMLCanvasElement, url: string) {
 }
 
 export function getImage(){
-    var canvas = <HTMLCanvasElement>document.getElementById("main-canvas");
-    var vectorCanvas = <HTMLCanvasElement>document.getElementById("vector-canvas");
 
-    canvas.getContext("2d").drawImage(vectorCanvas, 0, 0);
+    mainCanvas.getContext("2d").drawImage(vectorCanvas, 0, 0);
 
     var link = document.createElement('a');
     link.download = "test.png";
-    link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+    link.href = mainCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
     link.click();
+}
+
+function clearVectorCanvas(){
+
+    vectorCanvas.getContext("2d").clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
+
+    vectorCanvas.width = mainCanvas.width;
+    vectorCanvas.height = mainCanvas.height;
 }

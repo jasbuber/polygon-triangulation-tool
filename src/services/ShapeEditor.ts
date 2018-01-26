@@ -24,7 +24,7 @@ export class ShapeEditor {
 
     public vectorizeShape(shape: Shape, accuracyPoints: number): Array<Vector> {
 
-        let standardSpreadPoints: Array<number> = this.randomPointGenerator.generatePoints(shape.getBorder(), 100);
+        let standardSpreadPoints: Array<number> = this.randomPointGenerator.generatePoints(shape.getBorder(), accuracyPoints);
         return this.edgeGenerator.generateVectorShape(standardSpreadPoints, this.canvasWidth);
     }
 
