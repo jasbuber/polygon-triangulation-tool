@@ -109,11 +109,16 @@ function loadObjectUrl(canvas: HTMLCanvasElement, url: string) {
 
 export function getImage(){
 
-    mainCanvas.getContext("2d").drawImage(vectorCanvas, 0, 0);
+    let resultCanvas: HTMLCanvasElement = document.createElement('canvas');
+    resultCanvas.width = mainCanvas.width;
+    resultCanvas.height = mainCanvas.height;
+
+    resultCanvas.getContext("2d").drawImage(mainCanvas, 0, 0);
+    resultCanvas.getContext("2d").drawImage(vectorCanvas, 0, 0);
 
     var link = document.createElement('a');
     link.download = "test.png";
-    link.href = mainCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+    link.href = resultCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
     link.click();
 }
 
