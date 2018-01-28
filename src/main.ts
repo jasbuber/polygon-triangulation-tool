@@ -70,6 +70,7 @@ window.onload = function () {
 
     innerPointsSlider.oninput = function () {
         innerPointsElem.innerHTML = (<HTMLInputElement>this).value;
+        
     }
 
     borderPointsSlider.oninput = function () {
@@ -86,6 +87,9 @@ window.onload = function () {
 };
 
 export function loadImage(e: any) {
+
+    hideCanvas();
+
     vectorCanvas.getContext("2d").clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
 
     var url = URL.createObjectURL(e.target.files[0]);
@@ -104,6 +108,8 @@ function loadObjectUrl(canvas: HTMLCanvasElement, url: string) {
         canvas.height = img.height;
         context.drawImage(img, 0, 0);
         shape = new CanvasDataParser(new SortingService()).process(canvas, bgPixel);
+
+        showCanvas();
     }
 }
 
@@ -129,3 +135,27 @@ function clearVectorCanvas(){
     vectorCanvas.width = mainCanvas.width;
     vectorCanvas.height = mainCanvas.height;
 }
+
+function showCanvas(){
+    let canvasDiv: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-panel")[0];
+    let canvasWidthElem: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-width")[0];
+    let canvasHeightElem: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-height")[0];
+    let loader: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("loader")[0];
+
+    loader.style.display = "none";
+
+    canvasDiv.style.display = "block";
+    canvasDiv.style.width = mainCanvas.width.toString();
+    canvasDiv.style.height = mainCanvas.height.toString();
+
+    canvasWidthElem.innerText = mainCanvas.width.toString() + "px";
+    canvasHeightElem.innerText = mainCanvas.height.toString() + "px";
+}
+
+function hideCanvas() {
+    let canvasDiv: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-panel")[0];
+    let loader: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("loader")[0];
+    canvasDiv.style.display = "none";
+    loader.style.display = "block";
+}
+

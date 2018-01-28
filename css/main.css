@@ -1,17 +1,22 @@
 body{
-    margin-top: 50px;
+    padding: 20px;
 }
 
 div.control-panel{
-    text-align: center;
-    border: 1px solid black;
-    padding: 30px;
+    text-align: left;
     font-size: 16px;
+    margin-bottom: 20px;
+    background-color: #eee;
+    padding: 20px;
+    max-width: 870px;
+    position: relative;
 }
 
 div.canvas-panel{
-    text-align: center;
     position: relative;
+    display: none;
+    margin-left: 50px;
+    margin-top: 50px;
 }
 
 canvas#main-canvas{
@@ -19,17 +24,91 @@ canvas#main-canvas{
     top: 0px;
     left: 0px;
     z-index: 0;
+    border-left: black solid 1px;
+    border-top: black solid 1px;
 }
 
 canvas#vector-canvas {
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 1
+    z-index: 1;
+}
+
+span.canvas-width {
+    position: absolute;
+    top: -25px;
+    left: 49%;
+    z-index: 1;
+}
+
+span.canvas-height {
+    position: absolute;
+    top: 49%;
+    left: -50px;
+    z-index: 1;
+}
+
+div.sliders-panel, div.parameters-panel {
+    display: inline-block;
+    vertical-align: top;
 }
 
 div.sliders-panel{
-    
+    margin-right: 40px;
+}
+
+div.parameters-panel{
+    margin-top: 15px;
+}
+
+div.parameters-panel div label{
+    width: 165px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+div.sliders-panel div label {
+    width: 90px;
+    display: inline-block;
+}
+
+div.sliders-panel div span {
+    font-size: 17px;
+    font-weight: 550;
+}
+
+div.parameters-panel div input[type="text"] {
+    width: 50px;
+    display: inline-block;
+    text-align: center;
+}
+
+input[type="button"] {
+    border: none;
+    color: white;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input.green-button{
+    background-color: #4CAF50;
+}
+
+input.blue-button {
+    background-color: rgb(123, 124, 219);
+}
+
+div.slider-wrapper{
+    max-width: 600px;
+    min-width: 400px;
+    width: 600px;
+    margin-bottom: 10px;
+    position: relative;
 }
 
 div.actions-panel{
@@ -40,7 +119,7 @@ div.actions-panel{
     -webkit-appearance: none;
     width: 100%;
     height: 25px;
-    background: #d3d3d3;
+    background: #bbb;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
@@ -65,4 +144,28 @@ div.actions-panel{
     height: 25px;
     background: #4CAF50;
     cursor: pointer;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid rgb(123, 124, 219);
+    /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    left: 46%;
+    bottom: -100px;
+    display: none;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
