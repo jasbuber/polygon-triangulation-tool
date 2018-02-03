@@ -9,8 +9,6 @@ import { EdgeGenerator } from "./services/EdgeGenerator";
 import { ShapeEditor } from "./services/ShapeEditor";
 import { SortingService } from "./services/SortingService";
 
-const bgPixel: Pixel = new Pixel(0, 0, 0, 255, 255, 255, 0);
-
 var shape: Shape;
 
 var mainCanvas: HTMLCanvasElement;
@@ -51,7 +49,8 @@ function onImageLoad(){
     vectorCanvas.height = mainCanvas.height;
     let shapeEditor = new ShapeEditor(new RandomPointGenerator(), new EdgeGenerator(sortingService), sortingService, mainCanvas.width);
 
-    shape = new CanvasDataParser(new SortingService()).process(mainCanvas, bgPixel);
+
+    shape = new CanvasDataParser(new SortingService()).process(mainCanvas, getBackgroundColor());
 
 }
 
@@ -107,7 +106,7 @@ function loadObjectUrl(canvas: HTMLCanvasElement, url: string) {
         canvas.width = img.width;
         canvas.height = img.height;
         context.drawImage(img, 0, 0);
-        shape = new CanvasDataParser(new SortingService()).process(canvas, bgPixel);
+        shape = new CanvasDataParser(new SortingService()).process(canvas, getBackgroundColor());
 
         showCanvas();
     }
@@ -157,5 +156,27 @@ function hideCanvas() {
     let loader: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("loader")[0];
     canvasDiv.style.display = "none";
     loader.style.display = "block";
+}
+
+function getBackgroundColor(): Pixel{
+    let backgroundColorElem = <HTMLInputElement>document.getElementsByClassName("background-color")[0];
+    return parseColor(backgroundColorElem.value);
+}
+
+function parseColor(color: string): Pixel{
+    let matcher = color.match(/^#([0-9a-f]{6})$/i)[1];
+
+    let r = 255;
+    let g = 255;
+    let b = 255;
+
+    if (matcher) {
+        r = parseInt(matcher.substr(0, 2), 16);
+        g = parseInt(matcher.substr(2, 2), 16);
+        b = parseInt(matcher.substr(4, 2), 16);
+    }
+
+    console.log(new Pixel(0, 0, 0, r, g, b, 0));
+    return new Pixel(0, 0, 0, r, g, b, 0);
 }
 
