@@ -140,6 +140,7 @@ function showCanvas(){
     let canvasWidthElem: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-width")[0];
     let canvasHeightElem: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-height")[0];
     let loader: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("loader")[0];
+    let disabledButtons: NodeListOf<HTMLInputElement> = document.querySelectorAll(".disabled-button");
 
     loader.style.display = "none";
 
@@ -149,6 +150,11 @@ function showCanvas(){
 
     canvasWidthElem.innerText = mainCanvas.width.toString() + "px";
     canvasHeightElem.innerText = mainCanvas.height.toString() + "px";
+
+    for (let button of disabledButtons) {
+        button.disabled = false;
+        button.classList.remove("disabled-button");
+    }
 }
 
 function hideCanvas() {

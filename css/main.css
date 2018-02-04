@@ -103,6 +103,10 @@ input.blue-button {
     background-color: rgb(123, 124, 219);
 }
 
+input.disabled-button {
+    background-color: rgba(122, 122, 122, 0.644);
+}
+
 div.slider-wrapper{
     max-width: 600px;
     min-width: 400px;
