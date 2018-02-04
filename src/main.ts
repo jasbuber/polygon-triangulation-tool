@@ -87,11 +87,17 @@ window.onload = function () {
 
 export function loadImage(e: any) {
 
+    let files: FileList = e.target.files;
+
+    if ( files.length == 0 ){
+        return;
+    }
+
     hideCanvas();
 
     vectorCanvas.getContext("2d").clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
 
-    var url = URL.createObjectURL(e.target.files[0]);
+    var url = URL.createObjectURL(files[0]);
 
     loadObjectUrl(mainCanvas, url);
 }
@@ -140,7 +146,7 @@ function showCanvas(){
     let canvasWidthElem: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-width")[0];
     let canvasHeightElem: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("canvas-height")[0];
     let loader: HTMLDivElement = <HTMLDivElement>document.getElementsByClassName("loader")[0];
-    let disabledButtons: NodeListOf<HTMLInputElement> = document.querySelectorAll(".disabled-button");
+    let disabledButtons: NodeListOf<HTMLInputElement> = <NodeListOf<HTMLInputElement>> document.querySelectorAll(".disabled-button");
 
     loader.style.display = "none";
 
