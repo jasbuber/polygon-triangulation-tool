@@ -188,7 +188,6 @@ function parseColor(color: string): Pixel{
         b = parseInt(matcher.substr(4, 2), 16);
     }
 
-    console.log(new Pixel(0, 0, 0, r, g, b, 0));
     return new Pixel(0, 0, 0, r, g, b, 0);
 }
 
