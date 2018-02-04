@@ -58,9 +58,10 @@ export class ShapeEditor {
 
         let innerPoints: Array<number> = this.generateContentPoints(shape, innerFrequency, contentAccuracy, shapeVectors);
 
-        let edges: Array<Vector> = this.edgeGenerator.generateEdgesNet(innerPoints, innerPoints, this.canvasWidth, shapeVectors);
-
-        edges.push(...this.edgeGenerator.generateEdgesNet(innerPoints, borderPoints, this.canvasWidth, shapeVectors));
+        let endPoints = innerPoints.slice();
+        endPoints.push(...borderPoints);
+        
+        let edges: Array<Vector> = this.edgeGenerator.generateEdgesNet(innerPoints, endPoints, this.canvasWidth, shapeVectors);
 
         return edges;
     }
