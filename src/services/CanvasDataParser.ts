@@ -61,7 +61,7 @@ export class CanvasDataParser {
             let pixel = pixels[i];
             let previousPixel = pixels[i - 1];
             let x: number = i % width;
-            if (x != 0 && previousPixel && !pixel && pixels[i - width]) {
+            if (x != 0 && previousPixel && !pixel && pixels[i - width] && pixels[i - width + 1]) {
                 return i;
             }
         }
