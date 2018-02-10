@@ -1,4 +1,5 @@
 import { Vector } from "../model/Vector";
+import { PointWithTargets } from "../model/PointWithTargets";
 import { SortingService } from "../services/SortingService";
 
 export class EdgeGenerator {
@@ -11,31 +12,31 @@ export class EdgeGenerator {
 
     generateEdgesNet(points: Array<number>, connections: Array<number>, width: number, preEdges: Array<Vector>): Array<Vector> {
         let edges: Array<Vector> = [];
-        let closestPixels: Array<Array<number>> = [];
-        let pointsKeyMap: Map<number, number> = new Map<number, number>();
+        let closestPixels: Array<PointWithTargets> = [];
         let ctr = 0;
         let deletedClosestNr = 0;
 
         let connectionsCopy = connections.slice();
-        points.forEach((p, key) => {
-            let sortedPoints = this.sortingService.sortByClosestFromPoint(p, connections, width);
-            closestPixels.push(sortedPoints.slice(1));
-            pointsKeyMap.set(p, key);
+        
+        points.forEach( p => {
+            let sortedPoints = this.sortingService.sortByClosestFromPoint(p, connections, width).slice(1);
+            let pointWithTargets: PointWithTargets = new PointWithTargets(p, sortedPoints);
+            closestPixels.push(pointWithTargets);
         });
 
         while (closestPixels.length != deletedClosestNr) {
-            points.forEach((p, key) => {
 
-                let closest = closestPixels[key].shift();
+            closestPixels.forEach((p, key) =>{
+                let closest = p.getEndpoints().shift();
 
-                let edge = new Vector(p, closest, width);
+                let edge = new Vector(p.getPoint(), closest, width);
 
                 if (preEdges.every(e => !this.isColliding(e, edge))) {
                     edges.push(edge);
                     preEdges.push(edge);
                 }
 
-                if (closestPixels[key].length == 0) {
+                if (p.getEndpoints().length == 0) {
                     delete closestPixels[key];
                     deletedClosestNr++;
                 }

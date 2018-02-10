@@ -36,6 +36,14 @@ export class SortingService{
         return points.sort(this.compareByDistanceFromVectors(width, vectors));
     }
 
+    public sortByShortestVector(points: Array<Array<number>>, width: number){
+        let shortestVectorLength: Array<number> = [];
+
+        points.forEach( (arr, key) => {
+            shortestVectorLength[key] = this.calculateVectorLength(key, arr[0], width);
+        })
+    }
+
     private compareByDistanceFromPoint(p: number, width: number) {
         return function (a: number, b: number) {
 
@@ -97,6 +105,16 @@ export class SortingService{
             }
         }
 
+    }
+
+    private calculateVectorLength(pos1: number, pos2: number, width: number): number{
+
+        let aY = Math.floor(pos1 / width);
+        let aX = pos1 - (aY * width);
+        let bY = Math.floor(pos2 / width);
+        let bX = pos2 - (bY * width);
+
+        return Math.sqrt(Math.pow(aX - bX, 2) + Math.pow(aY - bY, 2));
     }
 
 }
